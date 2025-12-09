@@ -27,20 +27,13 @@ Route::get('/en', [HomeController::class, 'en'])->name('en');
 Route::post('/contact', [HomeController::class, 'store'])->name('contact.store');
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::resource('projects', ProjectController::class);
-});
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::resource('services', ServiceController::class);
-});
-
-Route::prefix('admin')->middleware(['auth','admin'])->group(function () {
-    Route::resource('testimonials', TestimonialController::class);
-});
-Route::prefix('admin')->name('admin.')->middleware(['auth','admin'])->group(function () {
-    Route::resource('about', AboutController::class);
-});
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
-    Route::resource('settings', \App\Http\Controllers\Admin\SettingController::class)->only(['index', 'edit', 'update']);
+    Route::resource('projects', ProjectController::class)->names('admin.projects');
+    Route::resource('services', ServiceController::class)->names('admin.services');
+    Route::resource('testimonials', TestimonialController::class)->names('admin.testimonials');
+    Route::resource('about', AboutController::class)->names('admin.about');
+    Route::resource('settings', \App\Http\Controllers\Admin\SettingController::class)
+        ->only(['index', 'edit', 'update'])
+        ->names('admin.settings');
 });
 Route::get('/dashboard', function () {
     return view('dashboard');

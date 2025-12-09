@@ -356,7 +356,7 @@
                 
                 <!-- Back Button -->
                 <div class="text-center mt-5">
-                    <a href="{{ route('projects.index') }}" class="back-btn">
+                    <a href="{{ route('home') }}" class="back-btn">
                         <i class="bi bi-arrow-left"></i>
                         {{ __('messages.back_to_projects') }}
                     </a>
