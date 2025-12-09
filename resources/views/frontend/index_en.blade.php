@@ -1204,10 +1204,10 @@
                 'image' => 'assets/img/profile-img.jpg',
                 'details' => [
                     ['label' => 'Website', 'value' => 'www.omar.dev'],
-                    ['label' => 'Phone', 'value' => '+966 50 123 4567'],
+                    ['label' => 'Phone', 'value' => '+972567557774'],
                     ['label' => 'City', 'value' => 'Riyadh, Saudi Arabia'],
                     ['label' => 'Degree', 'value' => 'Bachelor of Computer Science'],
-                    ['label' => 'Email', 'value' => 'contact@omar.dev'],
+                    ['label' => 'Email', 'value' => 'omarhamdia758@gmail'],
                     ['label' => 'Freelance', 'value' => 'Available'],
                 ],
                 'extra' => 'Specialized in creating innovative web solutions using Laravel, Vue.js, and modern frameworks. Committed to delivering high-quality and scalable applications.'
