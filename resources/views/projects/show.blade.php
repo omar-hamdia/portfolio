@@ -1,444 +1,313 @@
+@php
+    $locale = app()->getLocale();
+    $isAr = $locale === 'ar';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ $locale }}" dir="{{ $isAr ? 'rtl' : 'ltr' }}">
 <head>
+    <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $project->title }} - {{ config('app.name') }}</title>
-    
-    <!-- Favicons -->
-    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-    
-    <!-- Fonts -->
-    @if(app()->getLocale() == 'ar')
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    @else
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    @endif
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --light-bg: #f8f9fa;
-            --dark-bg: #343a40;
-        }
-        
-        body {
-            font-family: {{ app()->getLocale() == 'ar' ? "'Cairo', sans-serif" : "'Poppins', sans-serif" }};
-            line-height: 1.8;
-            color: #333;
-        }
-        
-        [dir="rtl"] {
-            text-align: right;
-        }
-        
-        [dir="ltr"] {
-            text-align: left;
-        }
-        
-        .project-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
-            color: white;
-            padding: 80px 0;
-            margin-bottom: 50px;
-        }
-        
-        .project-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        
-        .project-meta {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-        }
-        
-        .project-image {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .project-image img {
-            width: 100%;
-            height: 500px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .project-image img:hover {
-            transform: scale(1.02);
-        }
-        
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 15px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        .project-content {
-            font-size: 1.1rem;
-            line-height: 1.9;
-        }
-        
-        .project-content h2, 
-        .project-content h3, 
-        .project-content h4 {
-            color: var(--primary-color);
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        
-        .project-content ul, 
-        .project-content ol {
-            padding-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .tech-tag {
-            background: var(--light-bg);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .project-links {
-            display: flex;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-        
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .project-link.live {
-            background: var(--primary-color);
-            color: white;
-        }
-        
-        .project-link.github {
-            background: #333;
-            color: white;
-        }
-        
-        .project-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .related-projects {
-            background: var(--light-bg);
-            padding: 80px 0;
-            margin-top: 80px;
-        }
-        
-        .related-project-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-        
-        .related-project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .related-project-img {
-            height: 200px;
-            overflow: hidden;
-        }
-        
-        .related-project-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .related-project-card:hover .related-project-img img {
-            transform: scale(1.1);
-        }
-        
-        .related-project-content {
-            padding: 25px;
-        }
-        
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 25px;
-            background: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 30px;
-        }
-        
-        .back-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-        }
-        
-        @media (max-width: 768px) {
-            .project-title {
-                font-size: 2rem;
-            }
-            
-            .project-header {
-                padding: 50px 0;
-            }
-            
-            .project-image img {
-                height: 300px;
-            }
-            
-            .project-meta {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .project-links {
-                flex-direction: column;
-            }
-            
-            .project-link {
-                justify-content: center;
-            }
-        }
-    </style>
+    <title>{{ $isAr ? $project->title : $project->title_en }} | {{ ($isAr ? $settings->site_name : $settings->site_name_en) ?? 'Omar' }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/portfolio.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/project-show.css') }}">
 </head>
-<body dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
-    
-    <!-- Header -->
-    <header class="project-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h1 class="project-title">{{ $project->title }}</h1>
-                    <p class="lead mb-4">{{ $project->description }}</p>
-                    
-                    <div class="project-meta justify-content-center">
-                        @if($project->created_at)
-                            <div class="meta-item">
-                                <i class="bi bi-calendar3"></i>
-                                <span>{{ $project->created_at->format('F d, Y') }}</span>
-                            </div>
-                        @endif
-                        
-                        @if($project->github)
-                            <div class="meta-item">
-                                <i class="bi bi-github"></i>
-                                <span>GitHub Available</span>
-                            </div>
-                        @endif
-                        
+<body>
+    <div class="bg-orbs"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled" id="main-nav">
+        <div class="nav-inner">
+            <a href="{{ route('home') }}" class="nav-logo">OMAR.</a>
+            <div class="nav-links">
+                <a href="{{ route('home') }}"><i class="bi bi-house"></i> {{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+                <a href="{{ route('home') }}#projects">{{ $isAr ? 'أعمالي' : 'Projects' }}</a>
+                <button class="theme-toggle" id="theme-toggle" title="تبديل الوضع"><i class="bi bi-moon-fill"></i></button>
+                @if($isAr)
+                    <a href="{{ route('language.switch', 'en') }}" class="lang-toggle">EN</a>
+                @else
+                    <a href="{{ route('language.switch', 'ar') }}" class="lang-toggle">AR</a>
+                @endif
+                <a href="https://wa.me/972567557774" target="_blank" class="nav-cta">{{ $isAr ? 'تواصل الآن' : 'Contact' }}</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="project-hero">
+        <div class="project-hero-inner">
+            <div class="project-hero-content reveal">
+                <nav class="breadcrumb-nav">
+                    <a href="{{ route('home') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+                    <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
+                    <span>{{ $isAr ? 'تفاصيل المشروع' : 'Project Details' }}</span>
+                    <span class="views-badge"><i class="bi bi-eye-fill"></i> {{ $project->views_count ?? 0 }}</span>
+                </nav>
+
+                <h1 class="project-title">{{ $isAr ? $project->title : $project->title_en }}</h1>
+                <p class="project-desc">{{ $isAr ? $project->description : $project->description_en }}</p>
+
+                <!-- Rating Display -->
+                <div class="rating-row">
+                    <div>
+                        <div id="rating-display" class="stars-display">
+                            @php $avg = round($project->average_rating); @endphp
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="bi bi-star{{ $i <= $avg ? '-fill' : '' }}" style="color:{{ $i <= $avg ? '#fbbf24' : 'var(--star-empty)' }}"></i>
+                            @endfor
+                        </div>
+                        <div class="rating-meta">
+                            <span id="avg-val">{{ number_format($project->average_rating, 1) }}</span>/5
+                            (<span id="count-val">{{ $project->ratings_count }}</span> {{ $isAr ? 'تقييم' : 'Ratings' }})
+                        </div>
+                    </div>
+                    <div class="hero-divider"></div>
+                    <div class="hero-actions">
                         @if($project->link)
-                            <div class="meta-item">
-                                <i class="bi bi-link-45deg"></i>
-                                <span>Live Demo</span>
-                            </div>
+                        <a href="{{ $project->link }}" target="_blank" class="btn-primary"><i class="bi bi-box-arrow-up-right"></i> {{ $isAr ? 'معاينة حية' : 'Live Demo' }}</a>
+                        @endif
+                        @if($project->github)
+                        <a href="{{ $project->github }}" target="_blank" class="btn-outline"><i class="bi bi-github"></i> {{ $isAr ? 'الكود' : 'Source Code' }}</a>
+                        @endif
+                        @if($project->video)
+                        <a href="#project-video" class="btn-outline"><i class="bi bi-play-circle-fill"></i> {{ $isAr ? 'فيديو المشروع' : 'Project Video' }}</a>
                         @endif
                     </div>
+                </div>
+            </div>
+
+            <!-- Rating Card -->
+            <div class="rating-card-wrap reveal reveal-delay-2">
+                <div class="rating-card">
+                    <div class="rating-card-glow"></div>
+                    <h3>⭐ {{ $isAr ? 'قيّم هذا العمل' : 'Rate this work' }}</h3>
+                    <div id="star-rating-input" class="star-input-row">
+                        @for($i = 1; $i <= 5; $i++)
+                        <button class="star-btn" data-rating="{{ $i }}"><i class="bi bi-star-fill"></i></button>
+                        @endfor
+                    </div>
+                    <button id="submit-rating" class="submit-rating-btn">{{ $isAr ? 'إرسال التقييم' : 'Submit Rating' }}</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row reveal">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(14,165,233,0.1);color:var(--brand-light)"><i class="bi bi-calendar3"></i></div>
+                <div>
+                    <div class="stat-label">{{ $isAr ? 'تاريخ النشر' : 'Released' }}</div>
+                    <div class="stat-val">{{ $project->created_at ? $project->created_at->format('M Y') : '2024' }}</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(6,182,212,0.1);color:var(--accent)"><i class="bi bi-stack"></i></div>
+                <div>
+                    <div class="stat-label">{{ $isAr ? 'التقنيات' : 'Technologies' }}</div>
+                    <div class="tech-tags">
+                        @php $techs = is_array($project->technologies) ? $project->technologies : (json_decode($project->technologies, true) ?: []); @endphp
+                        @foreach(array_slice($techs, 0, 4) as $t)
+                        <span class="tech-tag">{{ $t }}</span>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(14,165,233,0.1);color:var(--brand-light)"><i class="bi bi-award-fill"></i></div>
+                <div>
+                    <div class="stat-label">{{ $isAr ? 'نوع المشروع' : 'Project Type' }}</div>
+                    <div class="stat-val">{{ $isAr ? 'تطبيق ويب متكامل' : 'Full-Stack Web App' }}</div>
                 </div>
             </div>
         </div>
     </header>
-    
-    <!-- Main Content -->
-    <main class="container">
-        <div class="row">
-            <div class="col-lg-10 mx-auto">
-                
-                <!-- Project Image -->
-                @if($project->image)
-                    <div class="project-image">
-                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="img-fluid">
-                    </div>
+
+    <!-- Video Section -->
+    @if($project->video)
+    <section id="project-video" class="video-section reveal">
+        <div class="video-container">
+            <span class="section-label">{{ $isAr ? 'عرض مرئي' : 'Video Presentation' }}</span>
+            <h2 class="section-title">{{ $isAr ? 'شاهد المشروع' : 'Watch' }} <span class="grad-text">{{ $isAr ? 'بالفعل' : 'in Action' }}</span></h2>
+            
+            <div class="video-wrapper">
+                @if(str_contains($project->video, 'youtube.com') || str_contains($project->video, 'youtu.be'))
+                    @php
+                        if(str_contains($project->video, 'v=')) {
+                            $video_id = explode('v=', $project->video)[1];
+                            $video_id = explode('&', $video_id)[0];
+                        } else {
+                            $video_id = basename($project->video);
+                        }
+                    @endphp
+                    <iframe src="https://www.youtube.com/embed/{{ $video_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                @else
+                    <video controls>
+                        <source src="{{ asset('storage/' . $project->video) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 @endif
-                
-                <!-- Video Demo -->
-                @if($project->video)
-                    <div class="video-container">
-                        {!! $project->video !!}
-                    </div>
-                @endif
-                
-                <!-- Project Links -->
-                @if($project->link || $project->github)
-                    <div class="project-links">
-                        @if($project->link)
-                            <a href="{{ $project->link }}" target="_blank" class="project-link live">
-                                <i class="bi bi-play-circle"></i>
-                                {{ __('messages.view_live_demo') }}
-                            </a>
-                        @endif
-                        
-                        @if($project->github)
-                            <a href="{{ $project->github }}" target="_blank" class="project-link github">
-                                <i class="bi bi-github"></i>
-                                {{ __('messages.view_on_github') }}
-                            </a>
-                        @endif
-                    </div>
-                @endif
-                
-                <!-- Project Content -->
-                <div class="project-content mt-5">
-                    @if($project->content)
-                        {!! $project->content !!}
-                    @else
-                        <p class="lead">{{ $project->description }}</p>
-                    @endif
-                </div>
-                
-                <!-- Back Button -->
-                <div class="text-center mt-5">
-                    <a href="{{ route('home') }}" class="back-btn">
-                        <i class="bi bi-arrow-left"></i>
-                        {{ __('messages.back_to_projects') }}
-                    </a>
-                </div>
-                
             </div>
+        </div>
+    </section>
+    @endif
+
+    <!-- Gallery Section -->
+    <main class="gallery-section">
+        <div class="gallery-header reveal">
+            <span class="section-label">{{ $isAr ? 'معرض الصور' : 'Gallery' }}</span>
+            <h2 class="section-title">{{ $isAr ? 'لقطات من' : 'Screenshots of' }} <span class="grad-text">{{ $isAr ? 'المشروع' : 'the Project' }}</span></h2>
+        </div>
+        <div class="gallery-cards reveal">
+            @php $gallery = is_array($project->images) ? $project->images : (json_decode($project->images, true) ?: []); @endphp
+            @foreach($gallery as $idx => $img)
+            <div class="gallery-card" data-index="{{ $idx }}">
+                <div class="gallery-card-inner">
+                    <img src="{{ asset('storage/' . $img) }}" alt="Project Screenshot {{ $idx + 1 }}" loading="lazy">
+                    <div class="gallery-card-overlay">
+                        <div class="gallery-card-number">{{ str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}</div>
+                        <div class="gallery-card-actions">
+                            <button class="gallery-zoom-btn" data-index="{{ $idx }}"><i class="bi bi-arrows-fullscreen"></i></button>
+                        </div>
+                    </div>
+                    <div class="gallery-card-shine"></div>
+                </div>
+            </div>
+            @endforeach
         </div>
     </main>
-    
-    <!-- Related Projects -->
-    @if($relatedProjects->count() > 0)
-        <section class="related-projects">
-            <div class="container">
-                <div class="row mb-5">
-                    <div class="col-12 text-center">
-                        <h2 class="mb-3">{{ __('messages.related_projects') }}</h2>
-                        <p class="text-muted">{{ __('messages.check_other_projects') }}</p>
-                    </div>
-                </div>
-                
-                <div class="row g-4">
-                    @foreach($relatedProjects as $relatedProject)
-                        <div class="col-md-4">
-                            <div class="related-project-card">
-                                <a href="{{ route('projects.show', $relatedProject->slug) }}" class="text-decoration-none">
-                                    <div class="related-project-img">
-                                        @if($relatedProject->image)
-                                            <img src="{{ asset('storage/' . $relatedProject->image) }}" alt="{{ $relatedProject->title }}">
-                                        @else
-                                            <img src="https://via.placeholder.com/400x300" alt="{{ $relatedProject->title }}">
-                                        @endif
-                                    </div>
-                                    <div class="related-project-content">
-                                        <h5 class="mb-2 text-dark">{{ $relatedProject->title }}</h5>
-                                        <p class="text-muted mb-0">{{ Str::limit($relatedProject->description, 100) }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-    
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('messages.all_rights_reserved') }}</p>
-                </div>
-                <div class="col-md-6 text-{{ app()->getLocale() == 'ar' ? 'start' : 'end' }}">
-                    <a href="{{ url('/') }}" class="text-white text-decoration-none">
-                        <i class="bi bi-house-door"></i> {{ __('messages.back_to_home') }}
-                    </a>
-                </div>
-            </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-backdrop"></div>
+        <button class="lightbox-close"><i class="bi bi-x-lg"></i></button>
+        <button class="lightbox-nav lightbox-prev"><i class="bi bi-chevron-{{ $isAr ? 'right' : 'left' }}"></i></button>
+        <button class="lightbox-nav lightbox-next"><i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i></button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-counter"><span id="lightbox-current">1</span> / <span id="lightbox-total">{{ count($gallery) }}</span></div>
         </div>
+    </div>
+
+    <footer class="footer">
+        <div>&copy; {{ date('Y') }} {{ $isAr ? 'جميع الحقوق محفوظة' : 'All rights reserved' }} - {{ ($isAr ? $settings->site_name : $settings->site_name_en) }}.</div>
     </footer>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+    <script src="{{ asset('js/portfolio.js') }}"></script>
     <script>
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+        // Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeBtn.querySelector('i');
+        function updateThemeIcon() {
+            const isLight = document.documentElement.classList.contains('light');
+            themeIcon.className = isLight ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+        }
+        updateThemeIcon();
+        themeBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('light');
+            localStorage.setItem('theme', document.documentElement.classList.contains('light') ? 'light' : 'dark');
+            updateThemeIcon();
+        });
+
+        // Rating Logic
+        let selectedRating = 0;
+        const starBtns = document.querySelectorAll('.star-btn');
+        starBtns.forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                const r = this.dataset.rating;
+                starBtns.forEach(b => {
+                    b.classList.toggle('preview', b.dataset.rating <= r);
+                });
+            });
+            btn.addEventListener('click', function() {
+                selectedRating = this.dataset.rating;
+                starBtns.forEach(b => {
+                    b.classList.toggle('selected', b.dataset.rating <= selectedRating);
+                    b.classList.remove('preview');
                 });
             });
         });
-        
-        // Add active class to current nav item
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPage = window.location.pathname;
-            document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.classList.add('active');
-                }
+        document.getElementById('star-rating-input').addEventListener('mouseleave', () => {
+            starBtns.forEach(b => {
+                b.classList.remove('preview');
+                b.classList.toggle('selected', b.dataset.rating <= selectedRating);
+            });
+        });
+        document.getElementById('submit-rating').addEventListener('click', async function() {
+            if (!selectedRating) return;
+            const res = await fetch('{{ route("project.rate", $project->slug) }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: JSON.stringify({ rating: selectedRating })
+            });
+            const data = await res.json();
+            if (data.success) { alert(data.message); location.reload(); }
+            else { alert(data.message); }
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        const lbCurrent = document.getElementById('lightbox-current');
+        const images = @json($gallery);
+        let currentIdx = 0;
+
+        function openLightbox(idx) {
+            currentIdx = idx;
+            lbImg.src = '{{ asset("storage") }}/' + images[idx];
+            lbCurrent.textContent = idx + 1;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function navLightbox(dir) {
+            currentIdx = (currentIdx + dir + images.length) % images.length;
+            lbImg.style.opacity = '0';
+            lbImg.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                lbImg.src = '{{ asset("storage") }}/' + images[currentIdx];
+                lbCurrent.textContent = currentIdx + 1;
+                lbImg.style.opacity = '1';
+                lbImg.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        document.querySelectorAll('.gallery-card').forEach(card => {
+            card.addEventListener('click', () => openLightbox(parseInt(card.dataset.index)));
+        });
+        document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        document.querySelector('.lightbox-backdrop').addEventListener('click', closeLightbox);
+        document.querySelector('.lightbox-prev').addEventListener('click', () => navLightbox(-1));
+        document.querySelector('.lightbox-next').addEventListener('click', () => navLightbox(1));
+        document.addEventListener('keydown', e => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navLightbox({{ $isAr ? '1' : '-1' }});
+            if (e.key === 'ArrowRight') navLightbox({{ $isAr ? '-1' : '1' }});
+        });
+
+        // 3D Tilt on gallery cards
+        document.querySelectorAll('.gallery-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                card.querySelector('.gallery-card-inner').style.transform =
+                    `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+                const shine = card.querySelector('.gallery-card-shine');
+                shine.style.background = `radial-gradient(circle at ${(x+0.5)*100}% ${(y+0.5)*100}%, rgba(255,255,255,0.15), transparent 60%)`;
+            });
+            card.addEventListener('mouseleave', e => {
+                card.querySelector('.gallery-card-inner').style.transform = '';
+                card.querySelector('.gallery-card-shine').style.background = '';
             });
         });
     </script>

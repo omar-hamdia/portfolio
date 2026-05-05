@@ -9,57 +9,40 @@ use App\Models\Testimonial;
 use App\Models\About;
 use App\Models\Setting;
 use App\Models\ContactMessage;
+use App\Models\SiteVisit;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
-{
-    // تحقق من الجلسة أو استخدم 'en' كافتراضي
-    $locale = session('locale', 'en');
-    
-    // روابط السوشيال ميديا (عدّلها كما تريد)
-    $socialLinks = [
-        'facebook'  => 'https://www.facebook.com/profile.php?id=61558584693394',
-        'linkedin'  => 'https://www.linkedin.com/in/omar-hamdia-541021369/',
-        'instagram' => 'https://www.instagram.com/hamdia5824/',
-        'github'    => 'https://github.com/omar-hamdia',
-        'twitter'   => 'https://x.com/omarHamdia41569',
-    ];
-    
+    {
+        // تسجيل الزيارة
+        SiteVisit::firstOrCreate([
+            'ip' => $request->ip(),
+            'visited_at' => Carbon::today(),
+        ]);
 
-    // تحميل البيانات مرة واحدة
-    $data = [
-        'projects'     => Project::all(),
-        'services'     => Service::all(),
-        'testimonials' => Testimonial::all(),
-        'about'        => About::first(),
-        'settings'     => Setting::first(),
-        'socialLinks'  => $socialLinks, // ← أضفناه هنا
-    ];
-    
-    return view('frontend.index', $data);
-}
+        $locale = session('locale', 'ar');
+        app()->setLocale($locale);
+        
+        $settings = Setting::first();
+        
+        $data = [
+            'projects'     => Project::with('ratings')->latest()->get(),
+            'services'     => Service::all(),
+            'testimonials' => Testimonial::all(),
+            'about'        => About::first(),
+            'settings'     => $settings,
+            'locale'       => $locale,
+        ];
+        
+        return view('frontend.index', $data);
+    }
 
     public function en(Request $request)
     {
-        // تحقق من الجلسة أو استخدم 'en' كافتراضي
-        $locale = session('locale', 'en');
-        
-        // تحميل البيانات مرة واحدة
-        $data = [
-            'projects' => Project::all(),
-            'services' => Service::all(),
-            'testimonials' => Testimonial::all(),
-            'about' => About::first(),
-            'settings' => Setting::first(),
-        ];
-        
-        // للتحقق من البيانات (افتح console في المتصفح)
-        // dd($data);
-        
-        
-             return view('frontend.index_en', $data);
-        
+        session(['locale' => 'en']);
+        return redirect()->route('home');
     }
     
     public function switchLang($lang)
@@ -68,7 +51,7 @@ class HomeController extends Controller
             session(['locale' => $lang]);
         }
         
-        return redirect()->route('home');
+        return redirect()->back()->withInput();
     }
     public function store(Request $request)
     {

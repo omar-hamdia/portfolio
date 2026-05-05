@@ -1,83 +1,83 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'تعديل الشهادة')
+@section('title', 'تعديل التقييم')
 
 @section('content')
-<div class="container mx-auto mt-10 max-w-lg px-4">
-    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">تعديل الشهادة</h1>
-
-    <form action="{{ route('testimonials.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-all duration-300">
-        @csrf
-        @method('PUT')
-
-        {{-- Name --}}
-        <div class="mb-5">
-            <label for="name" class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">الاسم</label>
-            <input type="text" name="name" id="name" class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 transition" value="{{ old('name', $testimonial->name) }}" required>
-            @error('name')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-200 bg-slate-50/50">
+            <h3 class="text-lg font-bold text-slate-800">تعديل رأي العميل</h3>
+            <p class="text-sm text-slate-500">تحديث بيانات التقييم الخاص بـ: {{ $testimonial->name }}</p>
         </div>
 
-        {{-- Role --}}
-        <div class="mb-5">
-            <label for="role" class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">المسمى الوظيفي (اختياري)</label>
-            <input type="text" name="role" id="role" class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 transition" value="{{ old('role', $testimonial->role) }}">
-            @error('role')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+        <form action="{{ route('admin.testimonials.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+            @csrf
+            @method('PUT')
 
-        {{-- Message --}}
-        <div class="mb-5">
-            <label for="message" class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">الرسالة</label>
-            <textarea name="message" id="message" rows="4" class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 transition" required>{{ old('message', $testimonial->message) }}</textarea>
-            @error('message')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Name AR/EN --}}
+                <div>
+                    <label for="name" class="block text-sm font-bold text-slate-700 mb-2">اسم العميل (عربي)</label>
+                    <input type="text" name="name" id="name" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="{{ old('name', $testimonial->name) }}" required>
+                    @error('name') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="name_en" class="block text-sm font-bold text-slate-700 mb-2">Client Name (English)</label>
+                    <input type="text" name="name_en" id="name_en" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="{{ old('name_en', $testimonial->name_en) }}" dir="ltr" required>
+                    @error('name_en') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
 
-        {{-- Avatar --}}
-        <div class="mb-5">
-            <label for="avatar" class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">الصورة الشخصية (اختياري)</label>
-            <input type="file" name="avatar" id="avatar" class="w-full border rounded px-4 py-2 dark:bg-gray-700 dark:border-gray-600 transition" accept="image/*">
-            @if($testimonial->avatar)
-                <img id="previewAvatar" src="{{ asset('storage/' . $testimonial->avatar) }}" class="mt-4 w-20 h-20 object-cover rounded-full shadow-md mx-auto">
-            @else
-                <img id="previewAvatar" src="#" class="mt-4 hidden w-20 h-20 object-cover rounded-full shadow-md mx-auto">
-            @endif
-            @error('avatar')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Role AR/EN --}}
+                <div>
+                    <label for="role" class="block text-sm font-bold text-slate-700 mb-2">المسمى الوظيفي (عربي)</label>
+                    <input type="text" name="role" id="role" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="{{ old('role', $testimonial->role) }}">
+                    @error('role') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="role_en" class="block text-sm font-bold text-slate-700 mb-2">Job Role (English)</label>
+                    <input type="text" name="role_en" id="role_en" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" value="{{ old('role_en', $testimonial->role_en) }}" dir="ltr">
+                    @error('role_en') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
 
-        <div class="flex items-center justify-between">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded transition">تحديث الشهادة</button>
-            <a href="{{ route('testimonials.index') }}" class="text-gray-500 hover:underline">إلغاء</a>
-        </div>
-    </form>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Message AR/EN --}}
+                <div>
+                    <label for="message" class="block text-sm font-bold text-slate-700 mb-2">نص التقييم (عربي)</label>
+                    <textarea name="message" id="message" rows="4" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" required>{{ old('message', $testimonial->message) }}</textarea>
+                    @error('message') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label for="message_en" class="block text-sm font-bold text-slate-700 mb-2">Testimonial Message (English)</label>
+                    <textarea name="message_en" id="message_en" rows="4" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" dir="ltr" required>{{ old('message_en', $testimonial->message_en) }}</textarea>
+                    @error('message_en') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            {{-- Avatar --}}
+            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-6">
+                <div class="w-20 h-20 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    @if($testimonial->avatar)
+                        <img src="{{ asset('storage/' . $testimonial->avatar) }}" class="w-full h-full object-cover">
+                    @else
+                        <i class="bi bi-person text-slate-300 text-3xl"></i>
+                    @endif
+                </div>
+                <div class="flex-1">
+                    <label for="avatar" class="block text-sm font-bold text-slate-700 mb-2">تغيير الصورة الشخصية</label>
+                    <input type="file" name="avatar" id="avatar" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all" accept="image/*">
+                    @error('avatar') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+                <a href="{{ route('admin.testimonials.index') }}" class="px-6 py-2.5 rounded-lg text-slate-600 font-bold hover:bg-slate-100 transition-all">إلغاء</a>
+                <button type="submit" class="px-10 py-2.5 rounded-lg bg-amber-500 text-white font-bold hover:bg-amber-600 shadow-lg shadow-amber-500/30 transition-all">حفظ التعديلات</button>
+            </div>
+        </form>
+    </div>
 </div>
-
-<script>
-    const avatarInput = document.getElementById('avatar');
-    const previewAvatar = document.getElementById('previewAvatar');
-
-    avatarInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewAvatar.setAttribute('src', e.target.result);
-                previewAvatar.classList.remove('hidden');
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(e) {
-        const confirmed = confirm('هل أنت متأكد من تحديث الشهادة؟');
-        if(!confirmed) e.preventDefault();
-    });
-</script>
 @endsection
+

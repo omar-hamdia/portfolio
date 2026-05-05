@@ -1,59 +1,84 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('title', 'المشاريع')
+@section('title', 'إدارة المشاريع')
 
 @section('content')
-<div class="container mx-auto mt-10 px-4">
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">المشاريع</h1>
-        <a href="{{ route('projects.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">إضافة مشروع</a>
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
+        <div>
+            <h3 class="text-lg font-bold text-slate-800">قائمة المشاريع</h3>
+            <p class="text-sm text-slate-500">هنا يمكنك إدارة كافة المشاريع المعروضة في الموقع.</p>
+        </div>
+        <a href="{{ route('admin.projects.create') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition-all">
+            <i class="bi bi-plus-lg"></i> إضافة مشروع جديد
+        </a>
     </div>
 
     <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-            <thead class="bg-gray-100 dark:bg-gray-700">
+        <table class="w-full text-right">
+            <thead class="bg-slate-50 border-b border-slate-200">
                 <tr>
-                    <th class="p-3 text-left text-gray-700 dark:text-gray-200">العنوان</th>
-                    <th class="p-3 text-left text-gray-700 dark:text-gray-200">الوصف</th>
-                    <th class="p-3 text-center text-gray-700 dark:text-gray-200">صورة</th>
-                    <th class="p-3 text-center text-gray-700 dark:text-gray-200">فيديو</th>
-                    <th class="p-3 text-center text-gray-700 dark:text-gray-200">GitHub</th>
-                    <th class="p-3 text-center text-gray-700 dark:text-gray-200">الرابط</th>
-                    <th class="p-3 text-center text-gray-700 dark:text-gray-200">الإجراءات</th>
+                    <th class="px-6 py-4 text-slate-600 font-bold text-sm">المشروع</th>
+                    <th class="px-6 py-4 text-slate-600 font-bold text-sm">الوصف</th>
+                    <th class="px-6 py-4 text-slate-600 font-bold text-sm text-center">الروابط</th>
+                    <th class="px-6 py-4 text-slate-600 font-bold text-sm text-center">الإجراءات</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-gray-800">
+            <tbody class="divide-y divide-slate-200">
                 @foreach($projects as $project)
-                <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 transition">
-                    <td class="p-3 text-gray-800 dark:text-gray-100">{{ $project->title }}</td>
-                    <td class="p-3 text-gray-800 dark:text-gray-100">{{ Str::limit($project->description, 50) }}</td>
-                    <td class="p-3 text-center">
-                        @if($project->image)
-                            <img src="{{ asset('storage/' . $project->image) }}" class="w-16 h-16 object-cover rounded shadow-sm">
-                        @endif
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
+                                @if($project->image)
+                                    <img src="{{ asset('storage/' . $project->image) }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-slate-100 flex items-center justify-center">
+                                        <i class="bi bi-image text-slate-400"></i>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                <div class="font-bold text-slate-800">{{ $project->title }}</div>
+                                <div class="text-xs text-slate-500">{{ $project->slug }}</div>
+                            </div>
+                        </div>
                     </td>
-                    <td class="p-3 text-center">
-                        @if($project->video)
-                            <a href="{{ asset('storage/' . $project->video) }}" target="_blank" class="text-blue-500 hover:underline">عرض الفيديو</a>
-                        @endif
+                    <td class="px-6 py-4">
+                        <p class="text-sm text-slate-600 line-clamp-2 max-w-xs">{{ $project->description }}</p>
                     </td>
-                    <td class="p-3 text-center">
-                        @if($project->github)
-                            <a href="{{ $project->github }}" target="_blank" class="text-blue-500 hover:underline">GitHub</a>
-                        @endif
+                    <td class="px-6 py-4">
+                        <div class="flex justify-center gap-2">
+                            @if($project->link)
+                                <a href="{{ $project->link }}" target="_blank" class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all" title="رابط المشروع">
+                                    <i class="bi bi-link-45deg"></i>
+                                </a>
+                            @endif
+                            @if($project->github)
+                                <a href="{{ $project->github }}" target="_blank" class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all" title="GitHub">
+                                    <i class="bi bi-github"></i>
+                                </a>
+                            @endif
+                            @if($project->video)
+                                <a href="{{ asset('storage/' . $project->video) }}" target="_blank" class="w-8 h-8 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center hover:bg-rose-600 hover:text-white transition-all" title="فيديو">
+                                    <i class="bi bi-play-fill"></i>
+                                </a>
+                            @endif
+                        </div>
                     </td>
-                    <td class="p-3 text-center">
-                        @if($project->link)
-                            <a href="{{ $project->link }}" target="_blank" class="text-blue-500 hover:underline">زيارة المشروع</a>
-                        @endif
-                    </td>
-                    <td class="p-3 text-center flex justify-center gap-2">
-                        <a href="{{ route('projects.edit', $project->id) }}" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-3 py-1 rounded transition">تعديل</a>
-                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف</button>
-                        </form>
+                    <td class="px-6 py-4">
+                        <div class="flex justify-center gap-2">
+                            <a href="{{ route('admin.projects.edit', $project->id) }}" class="inline-flex items-center gap-1 bg-amber-50 text-amber-600 px-3 py-1.5 rounded-md hover:bg-amber-500 hover:text-white transition-all text-sm font-bold">
+                                <i class="bi bi-pencil-square"></i> تعديل
+                            </a>
+                            <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-1 bg-rose-50 text-rose-600 px-3 py-1.5 rounded-md hover:bg-rose-600 hover:text-white transition-all text-sm font-bold" onclick="return confirm('هل أنت متأكد من الحذف؟')">
+                                    <i class="bi bi-trash"></i> حذف
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
@@ -62,3 +87,4 @@
     </div>
 </div>
 @endsection
+

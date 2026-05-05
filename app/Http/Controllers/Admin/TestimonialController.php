@@ -24,8 +24,11 @@ class TestimonialController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'role' => 'nullable|string|max:255',
+            'role_en' => 'nullable|string|max:255',
             'message' => 'required|string',
+            'message_en' => 'required|string',
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -35,7 +38,7 @@ class TestimonialController extends Controller
 
         Testimonial::create($data);
 
-        return redirect()->route('testimonials.index')->with('success', 'تم إضافة الشهادة بنجاح');
+        return redirect()->route('admin.testimonials.index')->with('success', 'تم إضافة الشهادة بنجاح');
     }
 
     public function edit(Testimonial $testimonial)
@@ -47,8 +50,11 @@ class TestimonialController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'role' => 'nullable|string|max:255',
+            'role_en' => 'nullable|string|max:255',
             'message' => 'required|string',
+            'message_en' => 'required|string',
             'avatar' => 'nullable|image|max:2048',
         ]);
 
@@ -58,12 +64,12 @@ class TestimonialController extends Controller
 
         $testimonial->update($data);
 
-        return redirect()->route('testimonials.index')->with('success', 'تم تعديل الشهادة بنجاح');
+        return redirect()->route('admin.testimonials.index')->with('success', 'تم تعديل الشهادة بنجاح');
     }
 
     public function destroy(Testimonial $testimonial)
     {
         $testimonial->delete();
-        return redirect()->route('testimonials.index')->with('success', 'تم حذف الشهادة بنجاح');
+        return redirect()->route('admin.testimonials.index')->with('success', 'تم حذف الشهادة بنجاح');
     }
 }

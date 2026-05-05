@@ -17,6 +17,7 @@ use App\Models\About;
 use App\Http\Controllers\LanguageController;
 Route::get('/projects', [ProjectsController::class, 'index'])->name('projects.index');
 Route::get('/projects/{project:slug}', [ProjectsController::class, 'show'])->name('projects.show');
+Route::post('/projects/{project:slug}/rate', [ProjectsController::class, 'rate'])->name('project.rate');
 // راوت تغيير اللغة
 Route::get('/language/{lang}', [HomeController::class, 'switchLang'])->name('language.switch');
 Route::get('/', [HomeController::class, 'index'])->name('home');

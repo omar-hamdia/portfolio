@@ -22,7 +22,9 @@ class ServiceController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
+            'title_en' => 'required|string|max:255',
             'description' => 'required|string',
+            'description_en' => 'required|string',
             'icon' => 'nullable|image|max:2048',
         ]);
 
@@ -32,7 +34,7 @@ class ServiceController extends Controller
 
         Service::create($data);
 
-        return redirect()->route('services.index')->with('success', 'تم إضافة الخدمة بنجاح');
+        return redirect()->route('admin.services.index')->with('success', 'تم إضافة الخدمة بنجاح');
     }
 
     public function edit(Service $service)
@@ -44,7 +46,9 @@ class ServiceController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
+            'title_en' => 'required|string|max:255',
             'description' => 'required|string',
+            'description_en' => 'required|string',
             'icon' => 'nullable|image|max:2048',
         ]);
 
@@ -54,12 +58,12 @@ class ServiceController extends Controller
 
         $service->update($data);
 
-        return redirect()->route('services.index')->with('success', 'تم تعديل الخدمة بنجاح');
+        return redirect()->route('admin.services.index')->with('success', 'تم تعديل الخدمة بنجاح');
     }
 
     public function destroy(Service $service)
     {
         $service->delete();
-        return redirect()->route('services.index')->with('success', 'تم حذف الخدمة بنجاح');
+        return redirect()->route('admin.services.index')->with('success', 'تم حذف الخدمة بنجاح');
     }
 }

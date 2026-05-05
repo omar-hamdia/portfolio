@@ -23,6 +23,7 @@ class SettingController extends Controller
     {
         $data = $request->validate([
             'site_name' => 'required|string|max:255',
+            'site_name_en' => 'required|string|max:255',
             'email' => 'nullable|email',
             'phone' => 'nullable|string|max:50',
             'social_links' => 'nullable|array',
