@@ -30,7 +30,12 @@ class AboutController extends Controller
             'image' => 'nullable|image|max:2048',
             'image_en' => 'nullable|image|max:2048',
             'cv' => 'nullable|mimes:pdf|max:5120',
+            'skills' => 'nullable|string',
         ]);
+
+        if ($request->skills) {
+            $data['skills'] = json_encode(array_map('trim', explode(',', $request->skills)));
+        }
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('about', 'public');
@@ -67,7 +72,12 @@ class AboutController extends Controller
             'image' => 'nullable|image|max:2048',
             'image_en' => 'nullable|image|max:2048',
             'cv' => 'nullable|mimes:pdf|max:5120',
+            'skills' => 'nullable|string',
         ]);
+
+        if ($request->skills) {
+            $data['skills'] = json_encode(array_map('trim', explode(',', $request->skills)));
+        }
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('about', 'public');

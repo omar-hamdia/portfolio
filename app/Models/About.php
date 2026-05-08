@@ -16,5 +16,6 @@ class About extends Model
         'image',
         'image_en',
         'cv',
+        'skills',
     ];
 }

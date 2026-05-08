@@ -212,9 +212,6 @@
                     <i class="bi bi-whatsapp"></i> {{ $isAr ? 'تواصل معي' : 'Contact Me' }}
                 </a>
             </div>
-            <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Toggle Menu">
-                <i class="bi bi-grid-fill"></i>
-            </button>
         </div>
     </nav>
 
@@ -286,8 +283,8 @@
                 <img src="{{ $profileImg }}" alt="Omar">
                 <div class="about-stats">
                     <div class="stat-item">
-                        <h4 data-count="3">0</h4>
-                        <p>{{ $isAr ? 'سنوات خبرة' : 'Years Experience' }}</p>
+                        <h4 data-count="1">0</h4>
+                        <p>{{ $isAr ? 'سنة خبرة' : 'Year Experience' }}</p>
                     </div>
                     <div class="stat-item">
                         <h4 data-count="{{ $projects->count() }}">0</h4>
@@ -309,7 +306,13 @@
                         <i class="bi bi-stack text-brand"></i> {{ $isAr ? 'التقنيات التي أتقنها' : 'Tech Stack' }}
                     </h4>
                     <div style="display:flex;flex-wrap:wrap;gap:0.5rem">
-                        @php $skills = is_array($about->skills ?? []) ? ($about->skills ?? []) : (json_decode($about->skills ?? '[]', true) ?: ['PHP', 'Laravel', 'Vue.js', 'MySQL', 'Docker', 'Tailwind']); @endphp
+                        @php 
+                            $defaultSkills = [
+                                'PHP', 'Laravel', 'HTML', 'CSS', 
+                                'JavaScript', 'Python', 'MySQL'
+                            ];
+                            $skills = is_array($about->skills ?? []) ? ($about->skills ?? []) : (json_decode($about->skills ?? '[]', true) ?: $defaultSkills); 
+                        @endphp
                         @foreach($skills as $skill)
                             <span class="skill-tag">{{ $skill }}</span>
                         @endforeach

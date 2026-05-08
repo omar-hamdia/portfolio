@@ -93,6 +93,17 @@
                         <textarea name="content_en" id="content_en" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none leading-relaxed" dir="ltr">{{ old('content_en', $about->content_en) }}</textarea>
                         @error('content_en') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
+
+                    <div>
+                        <label for="skills" class="block text-sm font-bold text-slate-700 mb-2">التقنيات (مفصولة بفاصلة ,)</label>
+                        @php
+                            $skillsArray = json_decode($about->skills, true) ?: [];
+                            $skillsString = is_array($skillsArray) ? implode(', ', $skillsArray) : '';
+                        @endphp
+                        <textarea name="skills" id="skills" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 outline-none leading-relaxed" placeholder="PHP, Laravel, MySQL...">{{ old('skills', $skillsString) }}</textarea>
+                        <p class="text-xs text-slate-500 mt-1">أدخل التقنيات التي تتقنها مفصولة بفاصلة.</p>
+                        @error('skills') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
             </div>
 
