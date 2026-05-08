@@ -3,9 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
         "dev": "vite",
-        "vercel-build": "npm run build && php artisan config:clear && php artisan route:clear && php artisan view:clear"
+        "build": "vite build",
+        "vercel-build": "npm run build"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
