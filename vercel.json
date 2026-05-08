@@ -8,12 +8,11 @@
   "routes": [
     {
       "src": "/build/(.*)",
-      "dest": "/build/$1"
+      "dest": "/public/build/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }
-  ],
-  "outputDirectory": "public"
+  ]
 }
